@@ -24,11 +24,16 @@ public class Book {
 
 
     public Book(RequestBook requestBook) {
-        this.name = requestBook.name();
-        this.type = requestBook.type();
-        this.entryDate = requestBook.entryDate();
+        
     }
 
 
+    public void setName(String name) {
+    }
 
+    public void setType(String type) {
+    }
+
+    public void setEntryDate(String s) {
+    }
 }

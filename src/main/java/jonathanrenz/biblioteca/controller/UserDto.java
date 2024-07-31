@@ -37,9 +37,9 @@ public class UserDto {
     @PutMapping
     @Transactional
     public ResponseEntity updateUser(@RequestBody @Validated RequestPutUser data){
-        Optional<User> optionalProduct = userRepository.findById(data.id());
-        if (optionalProduct.isPresent()) {
-            User user = optionalProduct.get();
+        Optional<User> optionalUser = userRepository.findById(data.id());
+        if (optionalUser.isPresent()) {
+            User user = optionalUser.get();
             user.setName(data.name());
             user.setEmail(data.email());
             user.setPassword(data.password());
@@ -48,4 +48,7 @@ public class UserDto {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping
+
 }
