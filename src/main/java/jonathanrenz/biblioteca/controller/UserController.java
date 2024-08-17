@@ -2,11 +2,16 @@ package jonathanrenz.biblioteca.controller;
 
 import jakarta.transaction.Transactional;
 import jonathanrenz.biblioteca.domain.User;
-import jonathanrenz.biblioteca.repositories.userRepository;
+import jonathanrenz.biblioteca.dto.RequestPutUser;
+import jonathanrenz.biblioteca.dto.RequestUser;
+import jonathanrenz.biblioteca.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+
 
 import java.util.List;
 import java.util.Optional;
@@ -14,10 +19,13 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/users")
 
-public class UserDto {
+public class UserController {
 
     @Autowired
-    private userRepository userRepository;
+    private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @GetMapping
     public List<User> getAll() {
@@ -27,16 +35,18 @@ public class UserDto {
 
     @PostMapping
     public ResponseEntity registerUser(@RequestBody RequestUser data) {
-
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = passwordEncoder.encode(data.password());
         User newUser = new User(data);
-        System.out.println(data);
+        newUser.setPassword(encodedPassword);
         userRepository.save(newUser);
         return ResponseEntity.ok().build();
     }
 
+
     @PutMapping
     @Transactional
-    public ResponseEntity updateUser(@RequestBody @Validated RequestPutUser data){
+    public ResponseEntity updateUser(@RequestBody @Validated RequestPutUser data) {
         Optional<User> optionalUser = userRepository.findById(data.id());
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
@@ -49,6 +59,15 @@ public class UserDto {
         }
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+        return userRepository.findById(id)
+                .map(user -> {
+                    userRepository.delete(user);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

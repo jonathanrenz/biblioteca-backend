@@ -1,4 +1,4 @@
-package jonathanrenz.biblioteca.controller;
+package jonathanrenz.biblioteca.dto;
 
 
 public record RequestPutBook (

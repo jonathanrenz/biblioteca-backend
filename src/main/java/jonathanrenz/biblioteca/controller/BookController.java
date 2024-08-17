@@ -3,12 +3,12 @@ package jonathanrenz.biblioteca.controller;
 
 import jakarta.transaction.Transactional;
 import jonathanrenz.biblioteca.domain.Book;
-import jonathanrenz.biblioteca.domain.User;
+import jonathanrenz.biblioteca.dto.RequestPutBook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import jonathanrenz.biblioteca.repositories.bookRepository;
+import jonathanrenz.biblioteca.repositories.BookRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,10 +17,10 @@ import java.util.Optional;
 @RequestMapping("books")
 
 
-public class BookDto {
+public class BookController {
 
     @Autowired
-    private bookRepository bookRepository;
+    private BookRepository bookRepository;
 
     @GetMapping
     public List<Book> getAll(){
@@ -43,5 +43,16 @@ public class BookDto {
         }
     }
 
+
+    @DeleteMapping("/{id}")
+    @Transactional
+    public ResponseEntity<Void> deleteBook(@PathVariable Long id) {
+        return bookRepository.findById(id)
+                .map(book -> {
+                    bookRepository.delete(book);
+                    return ResponseEntity.ok().<Void>build();
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 }

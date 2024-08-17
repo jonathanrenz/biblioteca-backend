@@ -2,7 +2,7 @@ package jonathanrenz.biblioteca.domain;
 
 
 import jakarta.persistence.*;
-import jonathanrenz.biblioteca.controller.RequestBook;
+import jonathanrenz.biblioteca.dto.RequestBook;
 import lombok.*;
 
 

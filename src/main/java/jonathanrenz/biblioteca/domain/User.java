@@ -2,7 +2,7 @@ package jonathanrenz.biblioteca.domain;
 
 
 import jakarta.persistence.*;
-import jonathanrenz.biblioteca.controller.RequestUser;
+import jonathanrenz.biblioteca.dto.RequestUser;
 import lombok.*;
 
 
@@ -11,7 +11,6 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 
 public class User {
@@ -22,7 +21,6 @@ public class User {
     @Column(unique = true)
     private String email;
     private String password;
-
 
 
     public User(RequestUser requestUser){
@@ -38,5 +36,24 @@ public class User {
     }
 
     public void setPassword(String password) {
+        this.password = password;
     }
+
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getEmail(){
+        return this.email;
+
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public User() {
+
+    }
+
 }

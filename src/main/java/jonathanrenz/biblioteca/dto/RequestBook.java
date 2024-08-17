@@ -1,8 +1,6 @@
-package jonathanrenz.biblioteca.controller;
+package jonathanrenz.biblioteca.dto;
 
 import org.antlr.v4.runtime.misc.NotNull;
-
-import java.util.Date;
 
 public record RequestBook(
         @NotNull
