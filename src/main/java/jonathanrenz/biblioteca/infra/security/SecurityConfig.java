@@ -38,7 +38,13 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/books").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/users/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/books/**").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/users").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/sendingEmail").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/auth/existsByEmail").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/auth/checkCod").permitAll()
+                        .requestMatchers(HttpMethod.PUT, "/auth/updatePassword").permitAll()
                         .anyRequest().authenticated()
+
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -53,4 +59,6 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
+
+
 }

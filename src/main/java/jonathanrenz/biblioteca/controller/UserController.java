@@ -4,6 +4,8 @@ import jakarta.transaction.Transactional;
 import jonathanrenz.biblioteca.domain.User;
 import jonathanrenz.biblioteca.dto.RequestPutUser;
 import jonathanrenz.biblioteca.dto.RequestUser;
+import jonathanrenz.biblioteca.dto.Response;
+import jonathanrenz.biblioteca.infra.security.TokenService;
 import jonathanrenz.biblioteca.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,9 @@ public class UserController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    @Autowired
+    private TokenService tokenService;
+
     @GetMapping
     public List<User> getAll() {
         List<User> listUser = userRepository.findAll();
@@ -46,16 +51,22 @@ public class UserController {
 
     @PutMapping
     @Transactional
-    public ResponseEntity updateUser(@RequestBody @Validated RequestPutUser data) {
+    public ResponseEntity updateUser(@RequestBody RequestPutUser data) {
         Optional<User> optionalUser = userRepository.findById(data.id());
+
+
         if (optionalUser.isPresent()) {
             User user = optionalUser.get();
+
             user.setName(data.name());
             user.setEmail(data.email());
-            user.setPassword(data.password());
-            return ResponseEntity.ok(user);
+            user.setPassword(passwordEncoder.encode(data.password()));
+            userRepository.save(user);
+
+            String token = this.tokenService.generateToken(user);
+            return ResponseEntity.ok(new Response(user.getName(), user.getEmail(), token));
         } else {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().build();
         }
     }
 
@@ -69,5 +80,6 @@ public class UserController {
                 })
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
 
 }

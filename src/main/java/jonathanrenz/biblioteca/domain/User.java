@@ -11,6 +11,7 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @EqualsAndHashCode(of = "id")
 
 public class User {
@@ -29,31 +30,5 @@ public class User {
         this.password = requestUser.password();
     }
 
-    public void setName(String name) {
-    }
-
-    public void setEmail(String email) {
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPassword() {
-        return this.password;
-    }
-
-    public String getEmail(){
-        return this.email;
-
-    }
-
-    public String getName(){
-        return this.name;
-    }
-
-    public User() {
-
-    }
 
 }
